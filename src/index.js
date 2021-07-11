@@ -1,18 +1,20 @@
 module.exports = function check(str, bracketsConfig) {
-  // your solution
-  const open = new Set(bracketsConfig.map(pair => pair[0]));
-  const close = new Set(bracketsConfig.map(pair => pair[1]));
-  const relevant = bracketsConfig.reduce((acc, [open, close]) => ({ ...acc, [close]: open }), {});
+  bracketsConfig = bracketsConfig.map(item => item.join(''));
 
-  let stack = [];
-  for (let char of str) {
-    if (open.has(char)) {
-      stack.push(char);
-    }
-    if (close.has(char)) {
-      if (relevant[char] !== stack.pop()) return false;
+  while (bracketsConfig.length) {
+    let iterator = 0;
+
+    bracketsConfig.forEach(item => {
+      if (str.indexOf(item) != -1) {
+        str = str.replace(item, '');
+      } else {
+        iterator += 1;
+      }
+    });
+    
+    if (iterator === bracketsConfig.length) {
+      bracketsConfig.length = 0;
     }
   }
-
-  return stack.length === 0;
+  return str.length === 0 ? true : false;
 }
